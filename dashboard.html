@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>LaCartaApp - Configura tu restaurante</title>
+    <!-- JSZip para generar ZIP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- EmailJS para enviar correo con el ZIP adjunto -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #fff5f0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px 16px 50px;
+            color: #2d1b0e;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.65rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid #c0392b;
+            padding-left: 14px;
+            color: #7b2c1f;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 6px;
+            color: #8b3c2a;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #f0cfc2;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            background: #fffef8;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .image-upload-area {
+            border: 1.5px dashed #e0b7aa;
+            background: #fffaf5;
+            border-radius: 24px;
+            padding: 12px;
+            margin-top: 6px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .image-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+            align-items: center;
+        }
+
+        .preview-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 16px;
+            background: #f0ede8;
+            border: 1px solid #e2dcd2;
+        }
+
+        .img-badge {
+            position: relative;
+            display: inline-block;
+        }
+
+        .remove-img {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e63946;
+            color: white;
+            border-radius: 30px;
+            width: 22px;
+            height: 22px;
+            font-size: 12px;
+            text-align: center;
+            line-height: 22px;
+            cursor: pointer;
+            border: 1px solid white;
+            font-weight: bold;
+        }
+
+        .btn-icon {
+            background: #c0392b;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #fce4db;
+            color: #a04028;
+            border: 1px solid #ecc0b0;
+        }
+
+        .extra-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .extra-item {
+            background: #fef0ea;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .badge-cat {
+            display: inline-block;
+            background: #f9e4db;
+            border-radius: 40px;
+            padding: 6px 14px;
+            margin: 4px 6px 4px 0;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .badge-cat.selected {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .menu-item {
+            background: #fff7f2;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 18px;
+            border: 1px solid #f3d9cf;
+        }
+
+        hr {
+            margin: 16px 0;
+            border: 0;
+            height: 1px;
+            background: #f3ddd2;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+        }
+
+        /* Banner de inicio con branding por defecto */
+        .banner-container {
+            margin-bottom: 24px;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+            background: #8b1e10;
+            text-align: center;
+            position: relative;
+        }
+        .banner-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 500 / 150;
+            object-fit: cover;
+            display: block;
+        }
+        .banner-default {
+            width: 100%;
+            aspect-ratio: 500 / 150;
+            background: linear-gradient(135deg, #c0392b, #e67e22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .banner-default .brand-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .banner-default .brand-sub {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .banner-default .upload-hint {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .banner-edit-overlay {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        /* Estilos para carrusel horizontal táctil */
+        .carousel-container {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+        .carousel-track {
+            display: flex;
+            gap: 12px;
+            padding: 8px 4px;
+        }
+        .carousel-slide {
+            flex: 0 0 85%;
+            scroll-snap-align: start;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            background: #eedfd6;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .carousel-container::-webkit-scrollbar {
+            height: 4px;
+        }
+        .carousel-container::-webkit-scrollbar-track {
+            background: #f0cfc2;
+            border-radius: 10px;
+        }
+        .carousel-container::-webkit-scrollbar-thumb {
+            background: #c0392b;
+            border-radius: 10px;
+        }
+        
+        /* Vista previa estilo Urku Food */
+        .preview-card {
+            background: #fefaf5;
+            border-radius: 28px;
+            overflow: hidden;
+        }
+        .restaurant-preview-header {
+            position: relative;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            background-color: #e0b7aa;
+        }
+        .restaurant-preview-logo {
+            position: absolute;
+            bottom: -30px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: white;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .restaurant-preview-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+        .restaurant-preview-info {
+            padding: 40px 16px 16px 16px;
+        }
+        .restaurant-preview-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d1b0e;
+        }
+        .restaurant-preview-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            color: #6b4c3a;
+        }
+        .restaurant-preview-details span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .restaurant-preview-desc {
+            margin: 12px 0;
+            color: #5a3e2e;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+        .preview-gallery {
+            margin: 12px 0;
+        }
+        .preview-gallery-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #7b2c1f;
+        }
+        .preview-dishes {
+            margin-top: 16px;
+        }
+        .preview-dish-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3ddd2;
+        }
+        .preview-dish-name {
+            font-weight: 600;
+            flex: 2;
+        }
+        .preview-dish-price {
+            color: #c0392b;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        .preview-dish-images {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .preview-dish-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #eedfd6;
+        }
+        .preview-delivery {
+            background: #fef0ea;
+            padding: 12px;
+            border-radius: 20px;
+            margin-top: 16px;
+            font-size: 0.85rem;
+        }
+        .update-preview-btn {
+            background: #c0392b10;
+            border: 1px solid #c0392b;
+            color: #c0392b;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-card {
+            background: white;
+            border-radius: 40px;
+            width: 85%;
+            max-width: 340px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+        .modal-card h3 {
+            font-size: 1.8rem;
+            color: #c0392b;
+            margin-bottom: 12px;
+        }
+        .modal-card p {
+            margin: 16px 0;
+            color: #2d3e2b;
+            line-height: 1.4;
+        }
+        .modal-card button {
+            background: #c0392b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .save-main-btn {
+            background: #b33a2c;
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .save-main-btn:active {
+            transform: scale(0.98);
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #2d1b0ee6;
+            backdrop-filter: blur(8px);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            z-index: 999;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(3px);
+            visibility: hidden;
+            flex-direction: column;
+        }
+        .loading-overlay.active {
+            visibility: visible;
+        }
+        .spinner {
+            background: #c0392b;
+            padding: 20px 30px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+        }
+        .email-info {
+            background: #fef0ea;
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #a04028;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- BANNER DE INICIO CON BRANDING POR DEFECTO -->
+    <div class="banner-container" id="bannerContainer">
+        <div id="bannerDefault" class="banner-default" onclick="document.getElementById('bannerInput').click()">
+            <div class="brand-text">🍽️ LaCartaApp</div>
+            <div class="brand-sub">Configura tu restaurante</div>
+            <div class="upload-hint">📸 tocar para cambiar banner</div>
+        </div>
+        <img id="bannerImage" class="banner-img" style="display:none;" alt="Banner">
+        <div id="bannerEditBtn" class="banner-edit-overlay" style="display:none;" onclick="document.getElementById('bannerInput').click()">✏️ Editar</div>
+        <input type="file" id="bannerInput" accept="image/*" style="display:none">
+    </div>
+    
+    <!-- SECCIÓN 1: INFORMACIÓN BÁSICA -->
+    <div class="card">
+        <div class="section-title">🍽️ Información básica</div>
+        <div class="form-group">
+            <label>Nombre del restaurante *</label>
+            <input type="text" id="restName" placeholder="Ej: Fuego y Brasa">
+        </div>
+        <div class="form-group">
+            <label>Horario de atención</label>
+            <input type="text" id="hours" placeholder="Lun-Dom 12pm a 10pm">
+        </div>
+        <div class="form-group">
+            <label>Descripción del restaurante</label>
+            <textarea id="description" placeholder="Cocina tradicional, parrilla argentina..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Logo del restaurante</label>
+            <div class="image-upload-area" id="logoUploadArea">📸 Toca o haz clic para subir logo</div>
+            <div id="logoPreviewContainer" class="image-preview-grid"></div>
+            <input type="file" id="logoInput" accept="image/*" style="display:none">
+        </div>
+        <div class="form-group">
+            <label>Dirección del establecimiento</label>
+            <input type="text" id="address" placeholder="Calle 123, Local 5">
+        </div>
+        <div class="form-group">
+            <label>Redes sociales (Instagram, Facebook)</label>
+            <input type="text" id="social" placeholder="@miRestaurante, fb.com/miresto">
+        </div>
+        <div class="form-group">
+            <label>Números de teléfono</label>
+            <input type="text" id="phones" placeholder="+57 300 123 4567">
+        </div>
+        <div class="form-group">
+            <label>Subir 5 fotografías (establecimiento, platos, personal) - Aparecerán en carrusel</label>
+            <div class="image-upload-area" id="galleryUploadArea">📸 + Subir imágenes (máx 5 - Carrusel)</div>
+            <div id="galleryPreview" class="image-preview-grid"></div>
+            <input type="file" id="galleryInput" accept="image/*" multiple style="display:none">
+        </div>
+    </div>
+
+    <!-- SECCIÓN 2: CONFIGURA TU MENÚ -->
+    <div class="card">
+        <div class="section-title">🍜 Configura tu menú</div>
+        <div style="background:#feefe8; border-radius: 40px; padding: 4px 16px; margin-bottom: 16px;">
+            <span style="font-weight:600;">➕ Nuevo plato</span>
+        </div>
+        <div id="menuBuilder">
+            <div class="form-group">
+                <label>Nombre del plato</label>
+                <input type="text" id="dishName" placeholder="Ej: Parrillada Mixta">
+            </div>
+            <div class="form-group">
+                <label>Sube 3 imágenes de tu plato</label>
+                <div class="image-upload-area" id="dishUploadArea">🍽️ Subir hasta 3 imágenes</div>
+                <div id="dishImagesPreview" class="image-preview-grid"></div>
+                <input type="file" id="dishInput" accept="image/*" multiple style="display:none">
+            </div>
+            <div class="form-group">
+                <label>Ingredientes</label>
+                <textarea id="ingredients" placeholder="Carne, chorizo, morcilla, ensalada..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Tiempo de preparación (minutos)</label>
+                <input type="text" id="prepTime" placeholder="30 min">
+            </div>
+            <div class="form-group">
+                <label>Categorías (selecciona una o varias)</label>
+                <div id="categoriesContainer" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;"></div>
+            </div>
+            <div class="form-group">
+                <label>Mejora tu plato (extras por precio extra)</label>
+                <div id="extrasList">
+                    <div class="extra-row">
+                        <input type="text" placeholder="Ej: Queso extra" style="flex:2;" id="extraName">
+                        <input type="text" placeholder="Precio $" style="flex:1;" id="extraPrice">
+                        <button type="button" class="btn-icon btn-secondary" id="addExtraBtn">➕ Agregar</button>
+                    </div>
+                </div>
+                <div id="extrasPreview" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;"></div>
+            </div>
+            <div class="form-group">
+                <label>Precio del Plato ($)</label>
+                <input type="text" id="priceDish" placeholder="35000">
+            </div>
+            <button type="button" id="saveDishBtn" class="btn-icon" style="background:#c0392b; width:100%; margin-top: 8px;">📌 Guardar Plato en el menú</button>
+        </div>
+        <hr>
+        <div>
+            <strong>📋 Platos agregados al menú:</strong>
+            <div id="dishesListContainer" style="margin-top: 12px; max-height: 280px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 3: DOMICILIOS -->
+    <div class="card">
+        <div class="section-title">🚚 Domicilios</div>
+        <div class="form-group">
+            <label>Opción de domicilio</label>
+            <div class="radio-group">
+                <label><input type="radio" name="deliveryType" value="incluido" checked> Domicilio incluido</label>
+                <label><input type="radio" name="deliveryType" value="no_incluido"> Domicilio no incluido</label>
+            </div>
+        </div>
+        <div id="noDeliveryDetailsContainer" style="display: none; margin-bottom: 18px;">
+            <label>✍️ Detalles sobre "domicilio no incluido"</label>
+            <textarea id="noDeliveryDetails" placeholder="Ej: Solo servicio en local, no realizamos envíos, recoger en tienda, etc."></textarea>
+        </div>
+        <div class="form-group" id="tariffGroup">
+            <label>Tarifas domicilio</label>
+            <div class="radio-group" style="margin-bottom: 10px;">
+                <label><input type="radio" name="tariffMode" value="fixed" checked> Tarifa fija ($)</label>
+                <label><input type="radio" name="tariffMode" value="distance"> Por distancia / zonas</label>
+            </div>
+            <div id="fixedInputDiv">
+                <input type="text" id="fixedFee" placeholder="Ej: 5000">
+            </div>
+            <div id="distanceDiv" style="display:none;">
+                <textarea id="distanceZones" placeholder="Ej: Zona Norte: $7000, Centro: $5000, Zona Sur: $9000"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>📝 Observaciones sobre domicilios</label>
+            <textarea id="deliveryObservations" placeholder="Ej: Pedir con 30 min de anticipación..."></textarea>
+        </div>
+    </div>
+
+    <!-- NUEVA PESTAÑA: VISTA PREVIA DEL RESTAURANTE (estilo Urku Food con carrusel) -->
+    <div class="card">
+        <div class="section-title">📱 Vista previa del restaurante</div>
+        <button class="update-preview-btn" id="refreshPreviewBtn">🔄 Actualizar vista previa</button>
+        <div id="restaurantPreview" class="preview-card">
+            <div class="restaurant-preview-header" id="previewHeader" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 500 150%27%3E%3Crect width=%27500%27 height=%27150%27 fill=%27%23c0392b%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27white%27 font-size=%2720%27 dy=%27.3em%27%3E🍽️ LaCartaApp%3C/text%3E%3C/svg%3E'); background-size: cover;">
+                <div class="restaurant-preview-logo" id="previewLogoContainer">
+                    <img id="previewLogoImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e67e22'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='white' font-size='40' dy='.3em'%3E🍔%3C/text%3E%3C/svg%3E" alt="Logo">
+                </div>
+            </div>
+            <div class="restaurant-preview-info">
+                <div class="restaurant-preview-name" id="previewRestName">Mi Restaurante</div>
+                <div class="restaurant-preview-details">
+                    <span>📍 <span id="previewAddressText">Dirección no especificada</span></span>
+                    <span>⏰ <span id="previewHoursText">Horario no especificado</span></span>
+                    <span>📞 <span id="previewPhonesText">—</span></span>
+                </div>
+                <div class="restaurant-preview-desc" id="previewDescText">
+                    Descripción del restaurante aparecerá aquí.
+                </div>
+                <div class="preview-gallery">
+                    <div class="preview-gallery-label">📸 Nuestro espacio</div>
+                    <div id="previewCarouselContainer" class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div style="color:#aaa; text-align:center; width:100%;">Sin imágenes de galería</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-dishes">
+                    <strong>🍽️ Nuestros platos</strong>
+                    <div id="previewDishesList" style="margin-top: 8px;">
+                        <div style="color:#aaa; text-align:center;">No hay platos agregados</div>
+                    </div>
+                </div>
+                <div class="preview-delivery" id="previewDeliveryContainer">
+                    <strong>🚚 Domicilio</strong><br>
+                    <span id="previewDeliveryText">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información de envío (correo predeterminado) -->
+    <div class="card">
+        <div class="section-title">📧 Envío automático</div>
+        <div class="email-info">
+            📨 La configuración se enviará automáticamente a: <strong>lacartaapp1@gmail.com</strong><br>
+            <span style="font-size:0.75rem;">También se descargará una copia local en tu dispositivo</span>
+        </div>
+    </div>
+
+    <button id="saveAllConfigBtn" class="save-main-btn">📦 Guardar, Descargar ZIP y Enviar a lacartaapp1@gmail.com</button>
+</div>
+
+<!-- Modal -->
+<div id="confirmationModal" class="modal-overlay">
+    <div class="modal-card">
+        <h3>✅ ¡Configuración enviada!</h3>
+        <p>El archivo ZIP ha sido generado, descargado y enviado al correo lacartaapp1@gmail.com</p>
+        <button id="closeModalBtn">Aceptar</button>
+    </div>
+</div>
+<div id="loadingOverlay" class="loading-overlay"><div class="spinner">📦 Preparando ZIP y enviando correo...</div></div>
+
+<script>
+    // ========== CONFIGURACIÓN DE EMAILJS ==========
+    const EMAILJS_PUBLIC_KEY = "VzU6HjsZ_R9QqIhXC";
+    const EMAILJS_SERVICE_ID = "service_la_carta";
+    const EMAILJS_TEMPLATE_ID = "template_resto_zip";
+    
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    
+    // Variables globales
+    let logoFile = null, logoPreviewUrl = null;
+    let galleryFiles = [];
+    let dishImagesFiles = [];
+    let extrasArray = [];
+    let menuDishes = [];
+    let bannerFile = null;
+    let bannerPreviewUrl = null;
+    
+    // Banner
+    const bannerDefault = document.getElementById('bannerDefault');
+    const bannerImage = document.getElementById('bannerImage');
+    const bannerEditBtn = document.getElementById('bannerEditBtn');
+    
+    function updateBannerPreview() {
+        if (bannerPreviewUrl) {
+            bannerImage.src = bannerPreviewUrl;
+            bannerImage.style.display = 'block';
+            bannerDefault.style.display = 'none';
+            bannerEditBtn.style.display = 'block';
+        } else {
+            bannerImage.style.display = 'none';
+            bannerDefault.style.display = 'flex';
+            bannerEditBtn.style.display = 'none';
+        }
+        updateRestaurantPreview();
+    }
+    
+    document.getElementById('bannerInput').addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            if (bannerPreviewUrl) URL.revokeObjectURL(bannerPreviewUrl);
+            bannerFile = e.target.files[0];
+            bannerPreviewUrl = URL.createObjectURL(bannerFile);
+            updateBannerPreview();
+        }
+    });
+    
+    // Logo
+    function updateLogoPreview() {
+        const container = document.getElementById('logoPreviewContainer');
+        container.innerHTML = '';
+        if (logoPreviewUrl) {
+            const div = document.createElement('div'); div.className = 'img-badge';
+            const img = document.createElement('img'); img.src = logoPreviewUrl; img.className = 'preview-img';
+            const removeBtn = document.createElement('span'); removeBtn.innerText = '✕'; removeBtn.className = 'remove-img';
+            removeBtn.onclick = () => { logoFile = null; if(logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl); logoPreviewUrl = null; updateLogoPreview(); updateRestaurantPreview(); };
+            div.appendChild(img); div.appendChild(removeBtn); container.appendChild(div);
+        }
+        updateRestaurantPreview();
+    }
+    document.getElementById('logoUploadArea').addEventListener('click', () => document.getElementById('logoInput').click());
+    document.getElementById('logoInput').addEventListener('change', (e) => {
+        if(e.target.files.length) { if(logoPreviewUrl) URL.revokeObjectURL(logoPreviewUrl); logoFile = e.target.files[0]; logoPreviewUrl = URL.createObjectURL(logoFile); updateLogoPreview(); }
+    });
+    
+    // Galería (carrusel)
+    function updateGalleryPreview() {
+        const container = document.getElementById('galleryPreview');
+        container.innerHTML = '';
+        galleryFiles.forEach((file, idx) => {
+            const url = URL.createObjectURL(file);
+            const div = document.createElement('div'); div.className = 'img-badge';
+            const img = document.createElement('img'); img.src = url; img.className = 'preview-img';
+            const removeBtn = document.createElement('span'); removeBtn.innerText = '✕'; removeBtn.className = 'remove-img';
+            removeBtn.onclick = () => { galleryFiles.splice(idx,1); updateGalleryPreview(); updateRestaurantPreview(); };
+            div.appendChild(img); div.appendChild(removeBtn); container.appendChild(div);
+        });
+        if(galleryFiles.length===0) container.innerHTML = '<span style="font-size:13px;">Sin imágenes</span>';
+        updateRestaurantPreview();
+    }
+    document.getElementById('galleryUploadArea').addEventListener('click', () => document.getElementById('galleryInput').click());
+    document.getElementById('galleryInput').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if(galleryFiles.length + files.length > 5) { alert("Máximo 5 fotografías para el carrusel"); return; }
+        galleryFiles.push(...files); updateGalleryPreview(); e.target.value = '';
+    });
+    
+    // Plato imágenes
+    function updateDishImagesPreview() {
+        const container = document.getElementById('dishImagesPreview');
+        container.innerHTML = '';
+        dishImagesFiles.forEach((file, idx) => {
+            const url = URL.createObjectURL(file);
+            const div = document.createElement('div'); div.className = 'img-badge';
+            const img = document.createElement('img'); img.src = url; img.className = 'preview-img';
+            const removeBtn = document.createElement('span'); removeBtn.innerText = '✕'; removeBtn.className = 'remove-img';
+            removeBtn.onclick = () => { dishImagesFiles.splice(idx,1); updateDishImagesPreview(); };
+            div.appendChild(img); div.appendChild(removeBtn); container.appendChild(div);
+        });
+        if(dishImagesFiles.length===0) container.innerHTML = '<span style="font-size:13px;">Sin imágenes (máx 3)</span>';
+    }
+    document.getElementById('dishUploadArea').addEventListener('click', () => document.getElementById('dishInput').click());
+    document.getElementById('dishInput').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if(dishImagesFiles.length + files.length > 3) { alert("Solo 3 imágenes por plato"); return; }
+        dishImagesFiles.push(...files); updateDishImagesPreview(); e.target.value = '';
+    });
+    
+    // Categorías
+    const categoriesList = ["comidas rapidas", "pizza & pasta", "postres y helados", "comida tipica", "Comida internacional"];
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
+        categoriesList.forEach(cat => {
+            const span = document.createElement('span'); span.className = 'badge-cat';
+            span.innerText = cat;
+            span.onclick = () => span.classList.toggle('selected');
+            container.appendChild(span);
+        });
+    }
+    renderCategories();
+    function getSelectedCategories() { return Array.from(document.querySelectorAll('#categoriesContainer .badge-cat.selected')).map(b=>b.innerText); }
+    
+    // Extras
+    function updateExtrasUI() {
+        const container = document.getElementById('extrasPreview');
+        container.innerHTML = '';
+        extrasArray.forEach((ex, idx) => {
+            const chip = document.createElement('div'); chip.className = 'extra-item';
+            chip.innerHTML = `${ex.name} +$${ex.price} <span style="cursor:pointer; color:#c0392b; margin-left:6px;" data-idx="${idx}">🗑️</span>`;
+            chip.querySelector('span')?.addEventListener('click', () => { extrasArray.splice(idx,1); updateExtrasUI(); });
+            container.appendChild(chip);
+        });
+    }
+    document.getElementById('addExtraBtn').addEventListener('click', () => {
+        const name = document.getElementById('extraName').value.trim();
+        const price = document.getElementById('extraPrice').value.trim();
+        if(!name || !price) { alert("Nombre y precio del extra requerido"); return; }
+        extrasArray.push({ name, price });
+        updateExtrasUI();
+        document.getElementById('extraName').value = ''; document.getElementById('extraPrice').value = '';
+    });
+    
+    // Guardar plato
+    document.getElementById('saveDishBtn').addEventListener('click', () => {
+        const name = document.getElementById('dishName').value.trim();
+        if(!name) { alert("Nombre del plato requerido"); return; }
+        const newDish = {
+            id: Date.now(), name: name, ingredients: document.getElementById('ingredients').value,
+            prepTime: document.getElementById('prepTime').value, price: document.getElementById('priceDish').value,
+            categories: getSelectedCategories(), extras: [...extrasArray], images: [...dishImagesFiles]
+        };
+        menuDishes.push(newDish);
+        document.getElementById('dishName').value = ''; document.getElementById('ingredients').value = '';
+        document.getElementById('prepTime').value = ''; document.getElementById('priceDish').value = '';
+        document.querySelectorAll('#categoriesContainer .badge-cat.selected').forEach(b=>b.classList.remove('selected'));
+        extrasArray = []; updateExtrasUI();
+        dishImagesFiles = []; updateDishImagesPreview();
+        renderMenuList();
+        updateRestaurantPreview();
+        showToast(`Plato "${name}" agregado`);
+    });
+    
+    function renderMenuList() {
+        const container = document.getElementById('dishesListContainer');
+        if(menuDishes.length===0) { container.innerHTML = '<p>No hay platos aún.</p>'; return; }
+        container.innerHTML = '';
+        menuDishes.forEach(dish => {
+            const div = document.createElement('div'); div.className = 'menu-item';
+            div.innerHTML = `<strong>🍲 ${escapeHtml(dish.name)}</strong><br>💰 $${dish.price} | ⏱️ ${dish.prepTime || '—'}<br>
+            📝 ${dish.ingredients.substring(0,60)}<br>🏷️ ${dish.categories.join(', ')}<br>
+            ${dish.extras.length ? `✨ Extras: ${dish.extras.map(ex=>`${ex.name}+$${ex.price}`).join(', ')}<br>` : ''}
+            <div style="display:flex; gap:8px;">${dish.images.map(img=>`<img src="${URL.createObjectURL(img)}" style="width:50px;height:50px;border-radius:12px;">`).join('')}</div>
+            <button class="btn-secondary" data-id="${dish.id}">🗑️ Eliminar</button>`;
+            const btn = div.querySelector('button');
+            btn.addEventListener('click', () => { menuDishes = menuDishes.filter(d=>d.id !== dish.id); renderMenuList(); updateRestaurantPreview(); showToast("Plato eliminado"); });
+            container.appendChild(div);
+        });
+    }
+    
+    // Domicilio lógica
+    const deliveryTypeRadios = document.querySelectorAll('input[name="deliveryType"]');
+    const noDeliveryContainer = document.getElementById('noDeliveryDetailsContainer');
+    function toggleNoDeliveryDetails() {
+        const selected = document.querySelector('input[name="deliveryType"]:checked').value;
+        noDeliveryContainer.style.display = selected === 'no_incluido' ? 'block' : 'none';
+        updateRestaurantPreview();
+    }
+    deliveryTypeRadios.forEach(radio => radio.addEventListener('change', toggleNoDeliveryDetails));
+    toggleNoDeliveryDetails();
+    
+    function updateTariffUI() { 
+        const isFixed = document.querySelector('input[name="tariffMode"]:checked').value === 'fixed'; 
+        document.getElementById('fixedInputDiv').style.display = isFixed ? 'block' : 'none'; 
+        document.getElementById('distanceDiv').style.display = isFixed ? 'none' : 'block'; 
+        updateRestaurantPreview();
+    }
+    document.querySelectorAll('input[name="tariffMode"]').forEach(r => r.addEventListener('change', updateTariffUI));
+    updateTariffUI();
+    
+    // Función para actualizar la vista previa con carrusel táctil
+    function updateRestaurantPreview() {
+        // Header (banner)
+        const headerDiv = document.getElementById('previewHeader');
+        if (bannerPreviewUrl) {
+            headerDiv.style.backgroundImage = `url('${bannerPreviewUrl}')`;
+        } else {
+            headerDiv.style.backgroundImage = `url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 500 150%27%3E%3Crect width=%27500%27 height=%27150%27 fill=%27%23c0392b%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 fill=%27white%27 font-size=%2720%27 dy=%27.3em%27%3E🍽️ LaCartaApp%3C/text%3E%3C/svg%3E')`;
+        }
+        // Logo
+        const previewLogo = document.getElementById('previewLogoImg');
+        if (logoPreviewUrl) {
+            previewLogo.src = logoPreviewUrl;
+        } else {
+            previewLogo.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e67e22'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='white' font-size='40' dy='.3em'%3E🍔%3C/text%3E%3C/svg%3E";
+        }
+        // Datos básicos
+        document.getElementById('previewRestName').innerText = document.getElementById('restName').value || "Mi Restaurante";
+        document.getElementById('previewAddressText').innerText = document.getElementById('address').value || "Dirección no especificada";
+        document.getElementById('previewHoursText').innerText = document.getElementById('hours').value || "Horario no especificado";
+        document.getElementById('previewPhonesText').innerText = document.getElementById('phones').value || "—";
+        document.getElementById('previewDescText').innerText = document.getElementById('description').value || "Descripción del restaurante aparecerá aquí.";
+        
+        // Carrusel horizontal con las 5 fotos
+        const carouselTrack = document.getElementById('carouselTrack');
+        if (galleryFiles.length > 0) {
+            carouselTrack.innerHTML = galleryFiles.map(f => `
+                <div class="carousel-slide">
+                    <img src="${URL.createObjectURL(f)}" alt="foto restaurante">
+                </div>
+            `).join('');
+        } else {
+            carouselTrack.innerHTML = '<div style="color:#aaa; text-align:center; width:100%; padding:20px;">Sin imágenes de galería</div>';
+        }
+        
+        // Platos con sus imágenes (máx 3 por plato)
+        const dishesContainer = document.getElementById('previewDishesList');
+        if (menuDishes.length > 0) {
+            dishesContainer.innerHTML = menuDishes.slice(0, 5).map(d => `
+                <div class="preview-dish-item" style="flex-direction:column; align-items:flex-start;">
+                    <div style="display:flex; justify-content:space-between; width:100%;">
+                        <span class="preview-dish-name">${escapeHtml(d.name)}</span>
+                        <span class="preview-dish-price">$${d.price}</span>
+                    </div>
+                    <div class="preview-dish-images">
+                        ${d.images.slice(0,3).map(img => `<img src="${URL.createObjectURL(img)}" class="preview-dish-thumb" alt="plato">`).join('')}
+                        ${d.images.length === 0 ? '<span style="font-size:0.7rem; color:#aaa;">Sin imágenes</span>' : ''}
+                    </div>
+                    <div style="font-size:0.7rem; color:#6b4c3a;">${escapeHtml(d.ingredients.substring(0,80))}${d.ingredients.length > 80 ? '...' : ''}</div>
+                </div>
+            `).join('');
+            if (menuDishes.length > 5) dishesContainer.innerHTML += '<div style="font-size:0.7rem; color:#aaa; text-align:center; margin-top:8px;">+ más platos disponibles</div>';
+        } else {
+            dishesContainer.innerHTML = '<div style="color:#aaa; text-align:center;">No hay platos agregados</div>';
+        }
+        
+        // Domicilio
+        const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+        const tariffMode = document.querySelector('input[name="tariffMode"]:checked').value;
+        let deliveryText = deliveryType === 'incluido' ? '✅ Domicilio incluido' : '❌ Domicilio no incluido';
+        if (deliveryType === 'no_incluido') {
+            const noDeliveryDetail = document.getElementById('noDeliveryDetails').value;
+            if (noDeliveryDetail) deliveryText += `<br><small>${escapeHtml(noDeliveryDetail)}</small>`;
+        } else {
+            if (tariffMode === 'fixed') {
+                const fee = document.getElementById('fixedFee').value;
+                if (fee) deliveryText += `<br>🚚 Tarifa fija: $${fee}`;
+            } else {
+                const zones = document.getElementById('distanceZones').value;
+                if (zones) deliveryText += `<br>📍 Zonas: ${escapeHtml(zones)}`;
+            }
+        }
+        const observations = document.getElementById('deliveryObservations').value;
+        if (observations) deliveryText += `<br><small>📝 ${escapeHtml(observations)}</small>`;
+        document.getElementById('previewDeliveryText').innerHTML = deliveryText;
+    }
+    
+    // Actualizar vista previa con botón y eventos
+    document.getElementById('refreshPreviewBtn').addEventListener('click', updateRestaurantPreview);
+    document.getElementById('restName').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('hours').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('description').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('address').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('phones').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('fixedFee').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('distanceZones').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('deliveryObservations').addEventListener('input', updateRestaurantPreview);
+    document.getElementById('noDeliveryDetails').addEventListener('input', updateRestaurantPreview);
+    
+    // Función principal: generar ZIP y enviar
+    async function generarZipYEnviar() {
+        const loading = document.getElementById('loadingOverlay');
+        loading.classList.add('active');
+        try {
+            const zip = new JSZip();
+            const restName = document.getElementById('restName').value.trim() || "Restaurante";
+            
+            const infoText = `=== CONFIGURACIÓN COMPLETA ===
+Restaurante: ${restName}
+Horario: ${document.getElementById('hours').value || '—'}
+Descripción: ${document.getElementById('description').value || '—'}
+Dirección: ${document.getElementById('address').value || '—'}
+Redes: ${document.getElementById('social').value || '—'}
+Teléfonos: ${document.getElementById('phones').value || '—'}
+
+=== DOMICILIOS ===
+Tipo: ${document.querySelector('input[name="deliveryType"]:checked').value === 'incluido' ? 'Domicilio incluido' : 'Domicilio no incluido'}
+${document.getElementById('noDeliveryDetails').value ? `Detalles no incluido: ${document.getElementById('noDeliveryDetails').value}` : ''}
+Tarifa: ${document.querySelector('input[name="tariffMode"]:checked').value === 'fixed' ? `Fija $${document.getElementById('fixedFee').value || '0'}` : `Zonas: ${document.getElementById('distanceZones').value || '—'}`}
+Observaciones: ${document.getElementById('deliveryObservations').value || '—'}
+
+=== MENÚ (${menuDishes.length} platos) ===
+${menuDishes.map((d, i) => `${i+1}. ${d.name} | $${d.price} | ${d.categories.join(', ')}`).join('\n')}
+
+=== FECHA DE EXPORTACIÓN ===
+${new Date().toLocaleString()}`;
+            zip.file("info_restaurante.txt", infoText);
+            
+            if (bannerFile) zip.file(`banner/banner.${bannerFile.name.split('.').pop()}`, await bannerFile.arrayBuffer());
+            if (logoFile) zip.file(`logo/logo.${logoFile.name.split('.').pop()}`, await logoFile.arrayBuffer());
+            for (let i=0; i<galleryFiles.length; i++) zip.file(`galeria/foto_${i+1}.${galleryFiles[i].name.split('.').pop()}`, await galleryFiles[i].arrayBuffer());
+            for (let d=0; d<menuDishes.length; d++) {
+                const dish = menuDishes[d];
+                const folder = `platos/${dish.id}_${dish.name.replace(/[^a-z0-9]/gi, '_')}`;
+                for (let imgIdx=0; imgIdx<dish.images.length; imgIdx++) {
+                    zip.file(`${folder}/img_${imgIdx+1}.${dish.images[imgIdx].name.split('.').pop()}`, await dish.images[imgIdx].arrayBuffer());
+                }
+                zip.file(`${folder}/detalle.txt`, `Nombre: ${dish.name}\nPrecio: $${dish.price}\nIngredientes: ${dish.ingredients}\nExtras: ${dish.extras.map(e=>`${e.name} +$${e.price}`).join(', ')}`);
+            }
+            
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(zipBlob);
+            link.href = url;
+            link.download = `${restName.replace(/[^a-z0-9]/gi, '_')}_config_restaurante.zip`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            const reader = new FileReader();
+            const base64Promise = new Promise((resolve) => {
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(zipBlob);
+            });
+            const base64data = await base64Promise;
+            
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_email: "lacartaapp1@gmail.com",
+                restaurant_name: restName,
+                zip_base64: base64data,
+                zip_filename: `${restName.replace(/[^a-z0-9]/gi, '_')}_config_restaurante.zip`
+            });
+            showToast("Correo enviado exitosamente a lacartaapp1@gmail.com");
+            document.getElementById('confirmationModal').classList.add('active');
+        } catch (err) {
+            console.error(err);
+            alert("Error: " + err.message + "\n\nEl ZIP se descargó localmente.");
+        } finally {
+            loading.classList.remove('active');
+        }
+    }
+    
+    document.getElementById('saveAllConfigBtn').addEventListener('click', generarZipYEnviar);
+    
+    const modal = document.getElementById('confirmationModal');
+    document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+    
+    function showToast(msg) { 
+        let existing = document.querySelector('.toast-msg'); 
+        if(existing) existing.remove(); 
+        const toast = document.createElement('div'); 
+        toast.className = 'toast-msg'; 
+        toast.innerText = msg; 
+        document.body.appendChild(toast); 
+        setTimeout(() => toast.remove(), 3000); 
+    }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    renderMenuList();
+    updateRestaurantPreview();
+</script>
+</body>
+</html>
