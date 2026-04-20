@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Próximamente · La Carta</title>
+  <!-- Google Fonts para tipografía moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4001e; /* Rojo exacto solicitado */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    /* Contenedor principal con animación sutil */
+    .coming-soon-container {
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Estilo para el logotipo PNG */
+    .logo {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo img {
+      max-width: 280px;
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0) invert(1); /* Convierte el logo a blanco para que contraste sobre el rojo */
+      transition: transform 0.3s ease;
+    }
+
+    .logo img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Texto principal "PROXIMAMENTE" */
+    .main-message {
+      margin: 1.5rem 0 1rem;
+    }
+
+    .main-message h1 {
+      font-size: 4.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      word-break: keep-all;
+    }
+
+    /* Texto secundario descriptivo */
+    .description {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    /* Línea decorativa sutil */
+    .divider {
+      width: 80px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
+      margin: 1.5rem auto;
+      border-radius: 4px;
+    }
+
+    /* Botón o badge opcional (opcional pero agrega dinamismo) */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin-top: 1rem;
+    }
+
+    /* Efecto de pulso suave para dar sensación de "en construcción" */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .main-message h1 {
+        font-size: 2.8rem;
+      }
+      .description {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+      .logo img {
+        max-width: 200px;
+      }
+      body {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Opcional: spinner o punto animado para dar sensación de actividad */
+    .dot-pulse {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 2rem;
+    }
+    .dot-pulse span {
+      width: 8px;
+      height: 8px;
+      background-color: white;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 1.4s infinite ease-in-out both;
+    }
+    .dot-pulse span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+    .dot-pulse span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+    @keyframes pulse {
+      0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="coming-soon-container">
+    <!-- LOGOTIPO PNG: Reemplaza "tu-logotipo.png" con la ruta real de tu archivo PNG -->
+    <div class="logo">
+      <img src="images/la_carta_intro.png" alt="Logotipo La Carta" onerror="this.src='https://placehold.co/400x120/f4001e/white?text=La+Carta'; this.style.filter='none';">
+    </div>
+
+    <!-- Mensaje principal -->
+    <div class="main-message">
+      <h1>PRÓXIMAMENTE</h1>
+    </div>
+
+    <!-- Línea decorativa -->
+    <div class="divider"></div>
+
+    <!-- Descripción amigable -->
+    <div class="description">
+      Estamos preparando algo increíble para ti.<br>Muy pronto descubrirás una nueva experiencia gastronómica.
+    </div>
+
+    <!-- Badge o sello de lanzamiento -->
+    <div class="badge">
+      <span>✨</span> Lanzamiento 2026 <span>✨</span>
+    </div>
+
+    <!-- Pequeño detalle animado de "en construcción" -->
+    <div class="dot-pulse">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</body>
+</html>
