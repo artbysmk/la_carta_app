@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>La Carta Links Oficiales</title>
+  <link rel="icon" href="images/favicon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #db0000;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 28px 20px;
+    }
+
+    .linktree-container {
+      max-width: 460px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: transparent;
+      padding: 12px 0 40px 0;
+      transition: all 0.2s ease;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .logo-png {
+      max-width: 220px;
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.25));
+      transition: transform 0.2s ease;
+    }
+    
+    .logo-png:hover {
+      transform: scale(1.02);
+    }
+
+    .links-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 38px;
+    }
+
+    .btn-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 50px;
+      padding: 11px 16px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      box-shadow: 0 8px 16px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-googleplay {
+      background-color: white;
+      border: none;
+      color: #db0000;
+    }
+
+    .btn-googleplay:hover {
+      background-color: #fff5f5;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -6px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-googleplay:active {
+      transform: translateY(1px);
+    }
+
+    .btn-web {
+      background-color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: #db0000;
+    }
+
+    .btn-web:hover {
+      background-color: white;
+      border-color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -6px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-web:active {
+      transform: translateY(1px);
+    }
+
+    .social-grid {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      border-radius: 60px;
+      width: 58px;
+      height: 58px;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .social-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: #db0000;
+      transition: all 0.25s ease;
+    }
+
+    .social-icon:hover {
+      background-color: #db0000;
+      border-color: #db0000;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    .social-icon:hover svg {
+      fill: #ffffff;
+    }
+
+    .social-icon:active {
+      transform: translateY(2px);
+      transition: 0.05s;
+    }
+
+    /* Logo Google Play */
+    .googleplay-logo {
+      text-align: center;
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+
+    .googleplay-img {
+      max-width: 140px;
+      width: 100%;
+      height: auto;
+      display: inline-block;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .googleplay-img:hover {
+      transform: scale(1.02);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 20px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 16px;
+      }
+      .linktree-container {
+        padding: 8px 0 32px 0;
+      }
+      .btn-link {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        gap: 8px;
+      }
+      .social-icon {
+        width: 52px;
+        height: 52px;
+      }
+      .social-icon svg {
+        width: 25px;
+        height: 25px;
+      }
+      .logo-png {
+        max-width: 170px;
+      }
+      .googleplay-img {
+        max-width: 120px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .social-grid {
+        gap: 18px;
+      }
+      .social-icon {
+        width: 48px;
+        height: 48px;
+      }
+      .social-icon svg {
+        width: 23px;
+        height: 23px;
+      }
+      .btn-link {
+        padding: 9px 12px;
+        font-size: 0.85rem;
+      }
+      .logo-png {
+        max-width: 140px;
+      }
+      .googleplay-img {
+        max-width: 105px;
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .linktree-container {
+      animation: fadeUp 0.45s ease-out;
+    }
+
+    img {
+      border: none;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="linktree-container">
+    <div class="header">
+      <div class="logo-wrapper">
+        <img src="images/la_carta_intro.png" alt="La Carta App" class="logo-png" id="mainLogo">
+      </div>
+    </div>
+
+    <div class="links-group">
+      <!-- Botón 1: Descarga en Google Play - SIN ICONOS -->
+      <a href="#" class="btn-link btn-googleplay" id="googlePlayBtn" target="_blank" rel="noopener noreferrer">
+        <span>Descarga la App</span>
+      </a>
+
+      <!-- Botón 2: Sitio Web de la carta - SIN ICONOS -->
+      <a href="index.html" class="btn-link btn-web" id="webCartaBtn" target="_blank" rel="noopener noreferrer">
+        <span>Sitio Web Oficial</span>
+      </a>
+    </div>
+
+    <div class="social-grid">
+      <!-- Instagram - URL correcta -->
+      <a href="https://www.instagram.com/la_carta_app/?hl=es" class="social-icon" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.25C14.0711 2.25 14.3309 2.25984 15.2065 2.29804C16.0822 2.33624 16.6791 2.46797 17.2038 2.66578C17.7474 2.87108 18.2199 3.15128 18.6915 3.62283C19.163 4.09438 19.4432 4.56692 19.6485 5.11046C19.8463 5.63517 19.978 6.23202 20.0162 7.1077C20.0544 7.98337 20.0642 8.24311 20.0642 10.3142C20.0642 12.3853 20.0544 12.645 20.0162 13.5207C19.978 14.3964 19.8463 14.9932 19.6485 15.5179C19.4432 16.0615 19.163 16.534 18.6915 17.0056C18.2199 17.4771 17.7474 17.7573 17.2038 17.9626C16.6791 18.1604 16.0822 18.2922 15.2065 18.3304C14.3309 18.3686 14.0711 18.3784 12 18.3784C9.92886 18.3784 9.66912 18.3686 8.79344 18.3304C7.91777 18.2922 7.32092 18.1604 6.79621 17.9626C6.25267 17.7573 5.78013 17.4771 5.30858 17.0056C4.83702 16.534 4.55682 16.0615 4.35152 15.5179C4.15371 14.9932 4.02199 14.3964 3.98378 13.5207C3.94558 12.645 3.93575 12.3853 3.93575 10.3142C3.93575 8.24311 3.94558 7.98337 3.98378 7.1077C4.02199 6.23202 4.15371 5.63517 4.35152 5.11046C4.55682 4.56692 4.83702 4.09438 5.30858 3.62283C5.78013 3.15128 6.25267 2.87108 6.79621 2.66578C7.32092 2.46797 7.91777 2.33624 8.79344 2.29804C9.66912 2.25984 9.92886 2.25 12 2.25ZM12 0C9.82965 0 9.54091 0.0104473 8.64822 0.0492524C7.75628 0.0880575 7.15339 0.222681 6.62586 0.423057C6.07909 0.630814 5.61472 0.912313 5.15118 1.37586C4.68763 1.8394 4.40613 2.30377 4.19838 2.85054C3.998 3.37807 3.86338 3.98096 3.82457 4.8729C3.78577 5.76559 3.77532 6.05433 3.77532 8.22468C3.77532 10.395 3.78577 10.6838 3.82457 11.5765C3.86338 12.4684 3.998 13.0713 4.19838 13.5988C4.40613 14.1456 4.68763 14.61 5.15118 15.0735C5.61472 15.5371 6.07909 15.8186 6.62586 16.0263C7.15339 16.2267 7.75628 16.3613 8.64822 16.4001C9.54091 16.4389 9.82965 16.4494 12 16.4494C14.1703 16.4494 14.4591 16.4389 15.3518 16.4001C16.2437 16.3613 16.8466 16.2267 17.3741 16.0263C17.9209 15.8186 18.3853 15.5371 18.8488 15.0735C19.3124 14.61 19.5939 14.1456 19.8016 13.5988C20.002 13.0713 20.1366 12.4684 20.1754 11.5765C20.2142 10.6838 20.2247 10.395 20.2247 8.22468C20.2247 6.05433 20.2142 5.76559 20.1754 4.8729C20.1366 3.98096 20.002 3.37807 19.8016 2.85054C19.5939 2.30377 19.3124 1.8394 18.8488 1.37586C18.3853 0.912313 17.9209 0.630814 17.3741 0.423057C16.8466 0.222681 16.2437 0.0880575 15.3518 0.0492524C14.4591 0.0104473 14.1703 0 12 0Z" />
+          <path d="M12 5.83887C9.43957 5.83887 7.35547 7.92296 7.35547 10.4834C7.35547 13.0438 9.43957 15.1279 12 15.1279C14.5604 15.1279 16.6445 13.0438 16.6445 10.4834C16.6445 7.92296 14.5604 5.83887 12 5.83887ZM12 13.1356C10.5344 13.1356 9.3478 11.949 9.3478 10.4834C9.3478 9.01778 10.5344 7.8312 12 7.8312C13.4656 7.8312 14.6522 9.01778 14.6522 10.4834C14.6522 11.949 13.4656 13.1356 12 13.1356Z" />
+          <circle cx="17.104" cy="6.896" r="1.5" />
+        </svg>
+      </a>
+
+      <!-- Facebook -->
+      <a href="#" class="social-icon" id="facebookBtn" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 12.0611C22 6.50451 17.5228 2 12 2C6.47715 2 2 6.50451 2 12.0611C2 17.0828 5.65684 21.2452 10.4375 22V14.9694H7.89844V12.0611H10.4375V9.84452C10.4375 7.32296 11.9305 5.93012 14.2146 5.93012C15.3088 5.93012 16.4531 6.12663 16.4531 6.12663V8.60261H15.1922C13.9499 8.60261 13.5625 9.37822 13.5625 10.1739V12.0611H16.3359L15.8926 14.9694H13.5625V22C18.3432 21.2452 22 17.0828 22 12.0611Z" />
+        </svg>
+      </a>
+
+      <!-- TikTok -->
+      <a href="#" class="social-icon" id="tiktokBtn" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.589 6.686a5.023 5.023 0 0 1-2.956-1.01 4.982 4.982 0 0 1-1.92-2.262A5.012 5.012 0 0 1 14.452 0h-3.114v16.108a3.073 3.073 0 0 1-1.521 2.645 3.034 3.034 0 0 1-3.02.116 3.074 3.074 0 0 1-1.589-2.71 3.078 3.078 0 0 1 1.598-2.691 3.042 3.042 0 0 1 3.008-.118v-3.29a6.334 6.334 0 0 0-3.493-.018 6.264 6.264 0 0 0-3.777 3.303 6.354 6.354 0 0 0 2.42 7.846 6.273 6.273 0 0 0 3.826.723 6.296 6.296 0 0 0 3.456-1.722 6.324 6.324 0 0 0 1.963-3.37c.176-.893.21-1.802.098-2.704V7.817a7.928 7.928 0 0 0 4.688 1.538v-3.29a5.02 5.02 0 0 1-2.81-1.379z" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Logo PNG de Google Play debajo de los botones de redes sociales -->
+    <div class="googleplay-logo">
+      <a href="#" id="googlePlayLogoLink" target="_blank" rel="noopener noreferrer">
+        <img src="images/googleplay.png" alt="Descargar en Google Play" class="googleplay-img" id="googlePlayLogo">
+      </a>
+    </div>
+
+    <div class="footer-note">
+      Síguenos en redes · Descarga la app oficial
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ==============================================================
+      // 🔴 IMPORTANTE: REEMPLAZA ESTAS URLS CON LAS TUYAS REALES 🔴
+      // ==============================================================
+      
+      // URL de descarga en Google Play (cambia por la URL real de tu app)
+      const GOOGLE_PLAY_URL = "proximamente.html";
+      
+      // URL de tu sitio web de la carta (cambia por la URL real)
+      const CARTA_WEB_URL = "index.html";
+      
+      // URLs de redes sociales (cambia por las reales)
+      const FACEBOOK_URL = "https://www.facebook.com/tucuenta";
+      const TIKTOK_URL = "https://www.tiktok.com/@tucuenta";
+      
+      // NOTA: Instagram ya está configurado correctamente con:
+      // https://www.instagram.com/la_carta_app/?hl=es
+      // ==============================================================
+      
+      // Asignar URLs a los botones
+      const googleBtn = document.getElementById('googlePlayBtn');
+      const webCartaBtn = document.getElementById('webCartaBtn');
+      const fbBtn = document.getElementById('facebookBtn');
+      const ttBtn = document.getElementById('tiktokBtn');
+      const googlePlayLogoLink = document.getElementById('googlePlayLogoLink');
+      
+      // Asignar enlaces si existen
+      if (googleBtn && GOOGLE_PLAY_URL && GOOGLE_PLAY_URL !== "#") {
+        googleBtn.href = GOOGLE_PLAY_URL;
+        googleBtn.setAttribute('target', '_blank');
+        googleBtn.setAttribute('rel', 'noopener noreferrer');
+      }
+      
+      if (webCartaBtn && CARTA_WEB_URL && CARTA_WEB_URL !== "#") {
+        webCartaBtn.href = CARTA_WEB_URL;
+        webCartaBtn.setAttribute('target', '_blank');
+        webCartaBtn.setAttribute('rel', 'noopener noreferrer');
+      }
+      
+      if (fbBtn && FACEBOOK_URL && FACEBOOK_URL !== "#") {
+        fbBtn.href = FACEBOOK_URL;
+        fbBtn.setAttribute('target', '_blank');
+        fbBtn.setAttribute('rel', 'noopener noreferrer');
+      }
+      
+      if (ttBtn && TIKTOK_URL && TIKTOK_URL !== "#") {
+        ttBtn.href = TIKTOK_URL;
+        ttBtn.setAttribute('target', '_blank');
+        ttBtn.setAttribute('rel', 'noopener noreferrer');
+      }
+      
+      // Asignar el mismo enlace de Google Play al logo
+      if (googlePlayLogoLink && GOOGLE_PLAY_URL && GOOGLE_PLAY_URL !== "#") {
+        googlePlayLogoLink.href = GOOGLE_PLAY_URL;
+        googlePlayLogoLink.setAttribute('target', '_blank');
+        googlePlayLogoLink.setAttribute('rel', 'noopener noreferrer');
+      }
+      
+      // Manejo de error del logo principal
+      const logoImg = document.getElementById('mainLogo');
+      if (logoImg) {
+        logoImg.addEventListener('error', function() {
+          const wrapper = document.querySelector('.logo-wrapper');
+          if (wrapper && !wrapper.querySelector('.fallback-logo')) {
+            const fallbackSpan = document.createElement('div');
+            fallbackSpan.className = 'fallback-logo';
+            fallbackSpan.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            fallbackSpan.style.width = '180px';
+            fallbackSpan.style.height = '180px';
+            fallbackSpan.style.borderRadius = '36px';
+            fallbackSpan.style.display = 'flex';
+            fallbackSpan.style.alignItems = 'center';
+            fallbackSpan.style.justifyContent = 'center';
+            fallbackSpan.style.fontSize = '4rem';
+            fallbackSpan.style.fontWeight = 'bold';
+            fallbackSpan.style.color = 'white';
+            fallbackSpan.innerText = '📄';
+            fallbackSpan.style.backdropFilter = 'blur(4px)';
+            logoImg.style.display = 'none';
+            wrapper.appendChild(fallbackSpan);
+          }
+        });
+      }
+      
+      // Manejo de error del logo de Google Play
+      const googlePlayLogoImg = document.getElementById('googlePlayLogo');
+      if (googlePlayLogoImg) {
+        googlePlayLogoImg.addEventListener('error', function() {
+          // Si no se encuentra la imagen, mostrar un texto alternativo
+          this.style.display = 'none';
+          const parent = this.parentElement;
+          if (parent && !parent.querySelector('.fallback-googleplay')) {
+            const fallbackText = document.createElement('span');
+            fallbackText.className = 'fallback-googleplay';
+            fallbackText.style.backgroundColor = 'white';
+            fallbackText.style.color = '#db0000';
+            fallbackText.style.padding = '10px 20px';
+            fallbackText.style.borderRadius = '50px';
+            fallbackText.style.fontWeight = 'bold';
+            fallbackText.style.fontSize = '0.85rem';
+            fallbackText.style.display = 'inline-block';
+            fallbackText.innerText = 'Descargar en Google Play';
+            parent.appendChild(fallbackText);
+          }
+        });
+      }
+      
+      console.log("✅ Enlaces actualizados correctamente - Iconos eliminados de botones");
+    })();
+  </script>
+</body>
+</html>
