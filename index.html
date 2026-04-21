@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>La Carta</title>
+  <link rel="icon" href="images/favicon.png">
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      color: #111827;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* Colores startup moderna - NUEVO TONO DE ROJO #f4001e */
+    :root {
+      --red-primary: #f4001e;
+      --red-dark: #d10019;
+      --red-soft: #ffe2e5;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 20px 25px -12px rgba(0, 0, 0, 0.08);
+      --shadow-glow: 0 20px 35px -10px rgba(244, 0, 30, 0.25);
+      --border-radius-card: 2rem;
+      --border-radius-sm: 1.5rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Navbar ROJO nuevo */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--red-primary);
+      backdrop-filter: blur(0);
+      border-bottom: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo img {
+      height: 48px;
+      width: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+      transition: transform 0.2s;
+    }
+
+    .logo img:hover {
+      transform: scale(1.02);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: white;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.85;
+    }
+
+    .btn-primary-nav {
+      background: white;
+      color: var(--red-primary) !important;
+      padding: 0.5rem 1.3rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.25s;
+    }
+
+    .btn-primary-nav:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      opacity: 1;
+    }
+
+    /* Botones generales */
+    .btn-primary {
+      background: var(--red-primary);
+      color: white !important;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(244, 0, 30, 0.3);
+      transition: all 0.25s;
+    }
+
+    .btn-primary:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(244, 0, 30, 0.4);
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--red-primary);
+      background: transparent;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      color: var(--red-primary);
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: var(--red-primary);
+      color: white;
+    }
+
+    /* Hero con imagen de fondo */
+    .hero {
+      padding: 5rem 0 6rem;
+      position: relative;
+      background-image: url('images/hero-bg.jpg'); /* Imagen de fondo para el hero */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    /* Overlay semi-transparente para mejorar legibilidad sobre la imagen de fondo */
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.88);
+      z-index: 1;
+    }
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-grid {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-text h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #111827 0%, var(--red-primary) 60%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #4b5563;
+      max-width: 550px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-image {
+      flex: 1;
+      position: relative;
+      border-radius: 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-glow);
+      background: #fef2f2;
+      min-height: 400px;
+    }
+
+    /* CARRUSEL PRINCIPAL - REEMPLAZA LA IMAGEN ESTÁTICA */
+    .hero-carousel {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 2rem;
+      overflow: hidden;
+    }
+
+    .carousel-slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+      object-fit: cover;
+      border-radius: 2rem;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 2rem;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10;
+      transition: all 0.2s;
+      color: var(--red-primary);
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-btn:hover {
+      background: var(--red-primary);
+      color: white;
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .carousel-btn.prev {
+      left: 16px;
+    }
+
+    .carousel-btn.next {
+      right: 16px;
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dot.active {
+      background: var(--red-primary);
+      width: 28px;
+      border-radius: 5px;
+    }
+
+    .badge-local {
+      background: var(--red-soft);
+      color: #b91c1c;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 1.8rem;
+    }
+
+    /* Secciones generales */
+    .section {
+      padding: 5rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      background: linear-gradient(145deg, #1f2937, var(--red-primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .section-title .line {
+      width: 70px;
+      height: 4px;
+      background: var(--red-primary);
+      margin: 0.8rem auto 0;
+      border-radius: 4px;
+    }
+
+    /* NUEVA SECCIÓN "¿QUÉ ES LA CARTA?" EN ROJO CON TEXTO BLANCO */
+    .que-es-section {
+      background-color: var(--red-primary);
+      color: white;
+    }
+    .que-es-section .section-title h2 {
+      background: white;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: none;
+    }
+    .que-es-section .section-title .line {
+      background: white;
+    }
+    .que-es-grid {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      background: transparent;
+      border-radius: 2rem;
+      padding: 1rem;
+    }
+    .que-es-imagen {
+      flex: 1;
+      text-align: center;
+    }
+    .que-es-imagen img {
+      max-width: 100%;
+      border-radius: 2rem;
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .que-es-texto {
+      flex: 1.2;
+      color: white;
+    }
+    .que-es-texto p {
+      font-size: 1.05rem;
+      color: white;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .que-es-texto i, .que-es-texto strong {
+      color: white;
+    }
+
+    .restaurante-premium {
+      background: linear-gradient(125deg, #ffffff 0%, #fff0f1 100%);
+      border-radius: 2.5rem;
+      padding: 3rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(244, 0, 30, 0.2);
+      box-shadow: var(--shadow-md);
+    }
+
+    .restaurante-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .restaurante-info {
+      flex: 1.2;
+    }
+
+    .restaurante-info h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #111827, var(--red-primary));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .restaurante-desc {
+      font-size: 1.05rem;
+      color: #374151;
+      margin-bottom: 1.8rem;
+      line-height: 1.5;
+    }
+
+    .ventajas-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .ventaja-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: white;
+      padding: 0.75rem 1.2rem;
+      border-radius: 60px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(244, 0, 30, 0.1);
+    }
+
+    .ventaja-item i {
+      font-size: 1.3rem;
+      color: var(--red-primary);
+      width: 32px;
+    }
+
+    .restaurante-imagen {
+      flex: 0.9;
+      text-align: center;
+    }
+
+    .restaurante-imagen img {
+      max-width: 100%;
+      border-radius: 2rem;
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+    }
+
+    .planes-marketing {
+      background: var(--gray-50);
+      border-radius: 3rem;
+      padding: 3rem 0;
+      margin: 2rem 0;
+    }
+
+    .planes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .plan-card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 1.5rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(244, 0, 30, 0.15);
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--red-primary);
+      box-shadow: 0 25px 35px -12px rgba(244, 0, 30, 0.25);
+    }
+
+    .plan-card.popular {
+      border: 2px solid var(--red-primary);
+      background: linear-gradient(145deg, #ffffff, #fffafa);
+      position: relative;
+    }
+
+    .plan-card.especial {
+      background: linear-gradient(135deg, #fff5f0, #ffffff);
+      border: 1px solid #ffaa66;
+    }
+
+    .plan-badge {
+      background: var(--red-primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 1rem;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .plan-card h3 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--red-primary);
+      margin: 1rem 0;
+    }
+
+    .plan-price span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #6b7280;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin: 1.5rem 0;
+      text-align: left;
+      flex-grow: 1;
+    }
+
+    .plan-features li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .plan-features i {
+      color: var(--red-primary);
+      width: 20px;
+    }
+
+    .plan-btn {
+      background: transparent;
+      border: 1.5px solid var(--red-primary);
+      color: var(--red-primary);
+      padding: 0.7rem 1rem;
+      border-radius: 40px;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      margin-top: 1rem;
+    }
+
+    .plan-btn:hover {
+      background: var(--red-primary);
+      color: white;
+    }
+
+    .razones-section {
+      background: white;
+      padding: 4rem 0;
+    }
+
+    .razones-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .razones-lista {
+      flex: 1;
+    }
+
+    .razones-lista .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .razones-imagen {
+      flex: 0.9;
+      text-align: center;
+    }
+
+    .razones-imagen img {
+      max-width: 100%;
+      border-radius: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(244, 0, 30, 0.2);
+    }
+
+    .mini-card {
+      background: var(--gray-50);
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      transition: 0.2s;
+      border: 1px solid rgba(244, 0, 30, 0.1);
+    }
+
+    .mini-card i {
+      font-size: 1.8rem;
+      color: var(--red-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .mini-card h4 {
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    /* CTA Block mejorado con imagen y nuevo diseño */
+    .cta-block {
+      background: linear-gradient(125deg, var(--red-primary), var(--red-dark));
+      border-radius: 2rem;
+      padding: 2.5rem 3rem;
+      text-align: center;
+      color: white;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .cta-content {
+      flex: 2;
+      text-align: left;
+      z-index: 2;
+    }
+
+    .cta-content h2 {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-content p {
+      max-width: 500px;
+      margin: 0 0 1.5rem 0;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .cta-image img {
+      max-width: 100%;
+      height: auto;
+      max-height: 180px;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .cta-image img:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      border: none;
+      color: white !important;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-whatsapp:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .btn-outline-light {
+      border: 2px solid white;
+      background: transparent;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-outline-light:hover {
+      background: white;
+      color: var(--red-dark);
+    }
+
+    footer {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 3rem 0 2rem;
+      margin-top: 3rem;
+    }
+
+    .footer-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .social-icons i {
+      font-size: 1.4rem;
+      margin-right: 1.2rem;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .social-icons i:hover {
+      color: var(--red-primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      font-size: 0.8rem;
+      border-top: 1px solid #2d3748;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 850px) {
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+      .container {
+        padding: 0 1.5rem;
+      }
+      .nav-container {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+      .restaurante-grid, .razones-grid, .que-es-grid {
+        flex-direction: column;
+      }
+      .planes-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-image {
+        min-height: 300px;
+      }
+      .carousel-slides {
+        min-height: 300px;
+      }
+      .cta-block {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+      }
+      .cta-content {
+        text-align: center;
+      }
+      .cta-content p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .cta-buttons {
+        justify-content: center;
+      }
+      .hero::before {
+        background: rgba(255, 255, 255, 0.92);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <img src="images/la_carta_intro.png" alt="La Carta Logo" style="height: 44px;">
+    </div>
+    <div class="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#que-es">Producto</a>
+      <a href="#restaurantes">Restaurantes</a>
+      <a href="#planes">Planes</a>
+      <a href="#razones">Ventajas</a>
+      <a href="proximamente.html" class="btn-primary-nav">Acceder</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero con imagen de fondo -->
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <h1>Pídelo a La Carta...</h1>
+        <p>El Mayor Directorio Gastronómico de Pasto.  Una vitrina digital atractiva donde miles de personas encuentran qué comer.
+
+Más que una app de domicilios, es una red social que impulsa tu restaurante con más visibilidad, más clientes y más ventas</p>
+        <div class="hero-buttons">
+          <a href="proximamente.html" class="btn-primary"><i class="fas fa-download"></i> Descargar app</a>
+          <a href="proximamente.html" class="btn-outline">Socio restaurantero →</a>
+        </div>
+        <div class="badge-local">
+          <i class="fas fa-map-marker-alt"></i> Hecho en Pasto · Startup local
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-carousel">
+          <div class="carousel-slides" id="heroCarouselSlides">
+            <div class="carousel-slide active">
+              <img src="images/home.png" alt="La Carta App">
+            </div>
+            <div class="carousel-slide">
+              <img src="images/home1.png" alt="Restaurantes destacados">
+            </div>
+            <div class="carousel-slide">
+              <img src="images/home2.png" alt="Menús digitales">
+            </div>
+            <div class="carousel-slide">
+              <img src="images/home3.png" alt="Promociones y ofertas">
+            </div>
+            <div class="carousel-slide">
+              <img src="images/home4.png" alt="Comunidad gastronómica">
+            </div>
+          </div>
+          <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+          <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ¿Qué es La Carta? con fondo rojo y texto blanco -->
+  <section id="que-es" class="section que-es-section">
+    <div class="container">
+     
+      <div class="que-es-grid">
+        <div class="que-es-imagen">
+          <img src="images/la_carta_intro2.png" alt="La Carta - Directorio Gastronómico">
+        </div>
+        <div class="que-es-texto">
+          <p><strong>En La Carta</strong> conectamos restaurantes y comensales en una sola plataforma visual, rápida y gamificada. Explora menús reales, compara precios, acumula puntos y descubre experiencias únicas. Más que una app, es una comunidad que impulsa lo local.</p>
+          <p>Disponible 24/7, con actualizaciones en tiempo real y beneficios exclusivos tanto para negocios como para usuarios. Olvídate del clásico "¿qué comemos?" y disfruta de una experiencia diseñada para simplificar tu vida gastronómica.</p>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN RESTAURANTES -->
+  <section id="restaurantes" class="section" style="padding-top: 0;">
+    <div class="container">
+      
+      <div class="restaurante-premium">
+        <div class="restaurante-grid">
+          <div class="restaurante-info">
+            <h2>Ser parte de La Carta es darle a tu restaurante la visibilidad que necesita para crecer.</h2>
+            <div class="restaurante-desc">
+              <p>Aparece donde los clientes ya están buscando, con una plataforma, práctica y fácil de usar, diseñado para convertir visitas en pedidos. Atrae nuevos comensales, fortalece tu reputación, promociona tu marca dentro de la app y toma decisiones inteligentes con datos reales. Todo en una sola plataforma pensada para aumentar tus ventas y llevar tu negocio al siguiente nivel 🔥</p>
+            </div>
+            <div class="ventajas-lista">
+              <div class="ventaja-item"><i class="fas fa-map-marker-alt"></i> <span>Presencia digital 24/7 en el mayor directorio gastronómico</span></div>
+              <div class="ventaja-item"><i class="fas fa-users"></i> <span>Más clientes y aumento constante de pedidos</span></div>
+              <div class="ventaja-item"><i class="fas fa-palette"></i> <span>Perfil visual que convierte visitas en ventas</span></div>
+              <div class="ventaja-item"><i class="fas fa-star"></i> <span>Reputación y posicionamiento dentro de la app</span></div>
+              <div class="ventaja-item"><i class="fas fa-chart-line"></i> <span>Datos y herramientas para crecer tu negocio de forma inteligente</span></div>
+            </div>
+          </div>
+          <div class="restaurante-imagen">
+            <img src="images/la_carta_app_2.png" alt="Restaurante en La Carta">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN "Por qué elegir La Carta" (antes de planes) -->
+  <section id="razones" class="razones-section">
+    <div class="container">
+      
+      <div class="razones-grid">
+        <div class="razones-lista">
+          <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px,1fr));">
+            <div class="mini-card"><i class="fas fa-chart-line"></i><h4>Mayor visibilidad</h4><p>Frente a la competencia local</p></div>
+            <div class="mini-card"><i class="fas fa-percent"></i><h4>Promociones inteligentes</h4><p>En horas clave para maximizar ventas</p></div>
+            <div class="mini-card"><i class="fas fa-database"></i><h4>Decisiones con data</h4><p>Métricas reales de tus clientes</p></div>
+            <div class="mini-card"><i class="fas fa-sync-alt"></i><h4>Actualización constante</h4><p>Sin costos de impresión</p></div>
+            <div class="mini-card"><i class="fas fa-hand-holding-heart"></i><h4>Impacto local</h4><p>Impulsa emprendedores de Pasto</p></div>
+            <div class="mini-card"><i class="fas fa-chart-simple"></i><h4>Crecimiento asegurado</h4><p>Herramientas para escalar</p></div>
+          </div>
+        </div>
+        <div class="razones-imagen">
+          <img src="images/la_carta_app_3.png" alt="Ventajas La Carta">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANES DE MARKETING -->
+  <section id="planes" class="planes-marketing">
+    <div class="container">
+      <div class="section-title">
+        <h2>Planes de Marketing</h2>
+        <div class="line"></div>
+        <p style="margin-top: 1rem; color: #4b5563;">Impulsa tu restaurante con herramientas profesionales y aumenta tu facturación</p>
+      </div>
+      <div class="planes-grid">
+        <div class="plan-card">
+          <h3>Basic</h3>
+          <div class="plan-price">Gratis</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i> Comisión por venta 10%</li>
+            <li><i class="fas fa-check-circle"></i> Perfil digital premium</li>
+            <li><i class="fas fa-check-circle"></i> Menú interactivo 24/7</li>
+            <li><i class="fas fa-check-circle"></i> Acceso a reseñas y calificaciones</li>
+            <li><i class="fas fa-check-circle"></i> Registro básico de pedidos</li>
+            <li><i class="fas fa-check-circle"></i> Soporte Técnico</li>
+          </ul>
+          <a href="https://wa.me/573157359260?text=Hola%21%20Quiero%20contratar%20el%20plan%20BASIC%20de%20La%20Carta.%20Por%20favor%20cu%C3%A9ntame%20m%C3%A1s%20informaci%C3%B3n." class="plan-btn" target="_blank" rel="noopener noreferrer">Elegir plan</a>
+        </div>
+        <div class="plan-card popular">
+          <div class="plan-badge">⭐ Más popular</div>
+          <h3>Premium</h3>
+          <div class="plan-price">$35000<span>/ mes</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i> Comisión por venta 8%</li>
+            <li><i class="fas fa-check-circle"></i> Todo Basic +</li>
+            <li><i class="fas fa-check-circle"></i> Aparición en restaurantes recomendados</li>
+            <li><i class="fas fa-check-circle"></i> Inclusión en sección de promociones</li>
+            <li><i class="fas fa-check-circle"></i> Presencia en platos recomendados</li>
+            <li><i class="fas fa-check-circle"></i> Mejor posicionamiento en búsquedas</li>
+          </ul>
+          <a href="https://wa.me/573157359260?text=Hola%21%20Quiero%20contratar%20el%20plan%20PREMIUM%20de%20La%20Carta.%20Por%20favor%20cu%C3%A9ntame%20m%C3%A1s%20informaci%C3%B3n." class="plan-btn" target="_blank" rel="noopener noreferrer">Elegir plan</a>
+        </div>
+        <div class="plan-card">
+          <h3>Pro</h3>
+          <div class="plan-price">$50000<span>/ mes</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i> Comisión por venta 6%</li>
+            <li><i class="fas fa-check-circle"></i> Todo Premium +</li>
+            <li><i class="fas fa-check-circle"></i> Banner en sección de noticias (rotativo)</li>
+            <li><i class="fas fa-check-circle"></i> Destacado en el mapa</li>
+            <li><i class="fas fa-check-circle"></i> Prioridad máxima en búsquedas</li>
+            <li><i class="fas fa-check-circle"></i> Mayor frecuencia en todas las secciones destacadas</li>
+          </ul>
+          <a href="https://wa.me/573157359260?text=Hola%21%20Quiero%20contratar%20el%20plan%20PRO%20de%20La%20Carta.%20Por%20favor%20cu%C3%A9ntame%20m%C3%A1s%20informaci%C3%B3n." class="plan-btn" target="_blank" rel="noopener noreferrer">Elegir plan</a>
+        </div>
+        <div class="plan-card especial">
+          <div class="plan-badge" style="background: #ff8c42;">✨ Espacios Premium</div>
+          <h3>Espacios Especiales</h3>
+          <div class="plan-price">Cotiza<span>/ personalizado</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-crown"></i> Banner de noticias</li>
+            <li><i class="fas fa-video"></i> Destacado en mapa</li>
+            <li><i class="fas fa-chart-line"></i> Restaurantes recomendados</li>
+            <li><i class="fas fa-trophy"></i> Platos recomendados</li>
+            <li><i class="fas fa-star"></i> Sección promos</li>
+          </ul>
+          <a href="https://wa.me/573157359260?text=Hola%21%20Quiero%20cotizar%20los%20Espacios%20Especiales%20de%20La%20Carta.%20Por%20favor%20cu%C3%A9ntame%20m%C3%A1s%20informaci%C3%B3n." class="plan-btn" style="background: #ff8c42; border-color:#ff8c42; color:white;" target="_blank" rel="noopener noreferrer">Contactar ventas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA final con imagen PNG y botón WhatsApp -->
+  <div class="container">
+    <div class="cta-block">
+      <div class="cta-content">
+        <h2>¿Quieres que tu Marca resalte realmente?</h2>
+        <p>Pregunta por nuestros servicios de Diseño Gráfico, Desarrollo Web y Marketing Digital</p>
+        <div class="cta-buttons">
+          <a href="https://wa.me/573157359260?text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20planes%20y%20c%C3%B3mo%20registrar%20mi%20restaurante%20en%20La%20Carta." class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-whatsapp"></i> ¿Quieres saber más?
+          </a>
+          <a href="#" class="btn-outline-light"><i class="fas fa-download"></i> Descargar app gratis</a>
+        </div>
+      </div>
+      <div class="cta-image">
+        <img src="images/la_carta_intro.png" alt="La Carta - App Gastronómica" onerror="this.src='https://placehold.co/400x200/f4001e/white?text=La+Carta+App';">
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      
+      <div class="logo" style="margin-bottom: 0.5rem;"><img src="images/la_carta_intro.png" alt="La Carta" style="height: 36px;">
+       <a href="links.html" target="_blank" rel="noopener noreferrer" style="color: #e5e7eb; text-decoration: none;">
+      </div>
+      <p><i class="fas fa-heart"></i> Hecho en Pasto, para el mundo.</p>
+      <div class="social-icons" style="margin-top: 1rem;">
+        <a href="https://www.instagram.com/la_carta_app/?hl=es" target="_blank" rel="noopener noreferrer" style="color: #e5e7eb; text-decoration: none;">
+  <i class="fab fa-instagram"></i>
+</a>
+        <i class="fab fa-tiktok"></i>
+      </div>
+    </div>
+    <div><h4 style="color:white;">Producto</h4><p>Para restaurantes<br>Planes de marketing<br>Centro de ayuda</p></div>
+    <div><h4 style="color:white;">Recursos</h4><p>Blog gastronómico<br>Comunidad<br>Prensa</p></div>
+    <div><h4 style="color:white;">Contacto</h4><p>lacartaapp1@gmail.com<br>+57 315 735 9260<br>Pasto - Nariño</p></div>
+  </div>
+  <div class="copyright container">
+    <p>© 2026 La Carta · Hecho en Pasto con pasión por lo local. Transformando la industria gastronómica.</p>
+  </div>
+</footer>
+
+<script>
+  // Carrusel principal del hero
+  const slides = document.querySelectorAll('.carousel-slide');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  const dotsContainer = document.getElementById('carouselDots');
+  let currentIndex = 0;
+  let autoInterval;
+  const totalSlides = slides.length;
+
+  function updateCarousel(index) {
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.classList.add('active');
+      } else {
+        slide.classList.remove('active');
+      }
+    });
+    updateDots();
+  }
+
+  function updateDots() {
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((dot, i) => {
+      if (i === currentIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+  }
+
+  function createDots() {
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (i === currentIndex) dot.classList.add('active');
+      dot.addEventListener('click', () => {
+        currentIndex = i;
+        updateCarousel(currentIndex);
+        resetAutoScroll();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateCarousel(currentIndex);
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateCarousel(currentIndex);
+  }
+
+  function resetAutoScroll() {
+    if (autoInterval) clearInterval(autoInterval);
+    autoInterval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+  }
+
+  if (totalSlides > 0) {
+    createDots();
+    updateCarousel(0);
+    prevBtn?.addEventListener('click', () => {
+      prevSlide();
+      resetAutoScroll();
+    });
+    nextBtn?.addEventListener('click', () => {
+      nextSlide();
+      resetAutoScroll();
+    });
+    resetAutoScroll();
+  }
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if(targetId === "#") return;
+      const target = document.querySelector(targetId);
+      if(target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
